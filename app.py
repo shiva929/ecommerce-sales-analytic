@@ -11,11 +11,11 @@ st.set_page_config(
 
 @st.cache_data
 def load_data():
-    revenue    = pd.read_parquet("data/processed/revenue_trend.parquet")
-    categories = pd.read_parquet("data/processed/top_categories.parquet")
-    rfm        = pd.read_parquet("data/processed/rfm_segments.parquet")
-    delivery   = pd.read_parquet("data/processed/delivery_performance.parquet")
-    reviews    = pd.read_parquet("data/processed/reviews_by_category.parquet")
+    revenue    = pd.read_parquet("data/revenue_trend.parquet")
+    categories = pd.read_parquet("data/top_categories.parquet")
+    rfm        = pd.read_parquet("data/rfm_segments.parquet")
+    delivery   = pd.read_parquet("data/delivery_performance.parquet")
+    reviews    = pd.read_parquet("data/reviews_by_category.parquet")
     return revenue, categories, rfm, delivery, reviews
 
 revenue, categories, rfm, delivery, reviews = load_data()
