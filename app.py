@@ -195,13 +195,4 @@ with st.expander("About this project"):
     SQL and RFM segmentation techniques used here are directly applicable 
     to Japanese e-commerce platforms like Rakuten, Mercari, and Amazon JP.
     """)
-```
 
----
-
-### requirements.txt
-```
-streamlit
-plotly
-pandas
-pyarrow
