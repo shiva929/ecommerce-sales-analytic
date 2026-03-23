@@ -138,61 +138,48 @@ with col2:
 
 # SQL queries expander
 with st.expander("View SQL queries used"):
-    st.markdown("""
-    **Monthly revenue trend**
-```sql
-    SELECT 
-        strftime('%Y-%m', o.order_purchase_timestamp) as month,
-        COUNT(DISTINCT o.order_id) as total_orders,
-        ROUND(SUM(op.payment_value), 2) as total_revenue,
-        ROUND(AVG(op.payment_value), 2) as avg_order_value
-    FROM orders o
-    JOIN order_payments op ON o.order_id = op.order_id
-    WHERE o.order_status = 'delivered'
-    GROUP BY month
-    ORDER BY month
-```
+    st.markdown("**Monthly revenue trend**")
+    st.code("""
+SELECT 
+    strftime('%Y-%m', o.order_purchase_timestamp) as month,
+    COUNT(DISTINCT o.order_id) as total_orders,
+    ROUND(SUM(op.payment_value), 2) as total_revenue,
+    ROUND(AVG(op.payment_value), 2) as avg_order_value
+FROM orders o
+JOIN order_payments op ON o.order_id = op.order_id
+WHERE o.order_status = 'delivered'
+GROUP BY month
+ORDER BY month
+    """, language="sql")
 
-    **Top categories by revenue**
-```sql
-    SELECT 
-        COALESCE(ct.product_category_name_english, 
-                 p.product_category_name, 'unknown') as category,
-        COUNT(DISTINCT oi.order_id) as total_orders,
-        ROUND(SUM(oi.price), 2) as total_revenue,
-        ROUND(AVG(oi.price), 2) as avg_price,
-        ROUND(AVG(r.review_score), 2) as avg_review
-    FROM order_items oi
-    JOIN products p ON oi.product_id = p.product_id
-    LEFT JOIN category_translation ct 
-        ON p.product_category_name = ct.product_category_name
-    LEFT JOIN order_reviews r ON oi.order_id = r.order_id
-    GROUP BY category
-    ORDER BY total_revenue DESC
-    LIMIT 10
-```
+    st.markdown("**Top categories by revenue**")
+    st.code("""
+SELECT 
+    COALESCE(ct.product_category_name_english, 
+             p.product_category_name, 'unknown') as category,
+    COUNT(DISTINCT oi.order_id) as total_orders,
+    ROUND(SUM(oi.price), 2) as total_revenue,
+    ROUND(AVG(oi.price), 2) as avg_price,
+    ROUND(AVG(r.review_score), 2) as avg_review
+FROM order_items oi
+JOIN products p ON oi.product_id = p.product_id
+LEFT JOIN category_translation ct 
+    ON p.product_category_name = ct.product_category_name
+LEFT JOIN order_reviews r ON oi.order_id = r.order_id
+GROUP BY category
+ORDER BY total_revenue DESC
+LIMIT 10
+    """, language="sql")
 
-    **RFM customer segmentation**
-```sql
-    SELECT
-        o.customer_id,
-        MAX(o.order_purchase_timestamp) as last_purchase,
-        COUNT(DISTINCT o.order_id) as frequency,
-        ROUND(SUM(op.payment_value), 2) as monetary
-    FROM orders o
-    JOIN order_payments op ON o.order_id = op.order_id
-    WHERE o.order_status = 'delivered'
-    GROUP BY o.customer_id
-```
-    """)
-
-with st.expander("About this project"):
-    st.markdown("""
-    **Dataset:** Olist Brazilian E-commerce (99,441 orders, 9 related tables)  
-    **Analysis:** SQL queries on SQLite database, Python post-processing  
-    **Techniques:** Revenue analysis, RFM segmentation, delivery KPIs, review analytics  
-
-    SQL and RFM segmentation techniques used here are directly applicable 
-    to Japanese e-commerce platforms like Rakuten, Mercari, and Amazon JP.
-    """)
-
+    st.markdown("**RFM customer segmentation**")
+    st.code("""
+SELECT
+    o.customer_id,
+    MAX(o.order_purchase_timestamp) as last_purchase,
+    COUNT(DISTINCT o.order_id) as frequency,
+    ROUND(SUM(op.payment_value), 2) as monetary
+FROM orders o
+JOIN order_payments op ON o.order_id = op.order_id
+WHERE o.order_status = 'delivered'
+GROUP BY o.customer_id
+    """, language="sql")
